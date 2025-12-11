@@ -15,7 +15,6 @@ from prometheus_client import (
     Histogram,
     Info,
     start_http_server,
-    REGISTRY,
 )
 
 from src.logger import get_logger

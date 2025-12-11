@@ -19,7 +19,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import QueuePool
 
 from src.logger import get_logger
-from src.secrets import SecretsManager, get_secrets_manager
+from src.secrets import get_secrets_manager
 
 logger = get_logger(__name__)
 

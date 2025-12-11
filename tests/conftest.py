@@ -7,9 +7,9 @@ Provides mock msfrpcd, test endpoints, and database fixtures.
 import pytest
 from datetime import datetime, timezone, timedelta
 from ipaddress import IPv4Network
-from unittest.mock import MagicMock, AsyncMock
+from unittest.mock import MagicMock
 
-from src.endpoint_manager import Endpoint, EndpointManager
+from src.endpoint_manager import Endpoint
 from src.rbac import RBACManager, Role, User
 from src.safe_mode import SafeModeController, ScopeAuthorization
 from src.logger import AuditLogger

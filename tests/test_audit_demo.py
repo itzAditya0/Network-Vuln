@@ -12,7 +12,6 @@ Run: pytest tests/test_audit_demo.py -v
 
 import copy
 import pytest
-from datetime import datetime, timezone
 
 from src.logger import AuditLogger
 

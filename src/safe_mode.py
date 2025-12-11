@@ -21,7 +21,7 @@ from ipaddress import IPv4Address, IPv4Network
 from typing import Any
 
 from src.logger import AuditLogger, get_logger
-from src.rbac import Permission, RBACManager, Role
+from src.rbac import Permission, RBACManager
 
 logger = get_logger(__name__)
 

@@ -6,10 +6,7 @@ Verifies threat prioritization logic.
 
 import pytest
 
-from src.scoring_engine import (
-    ScoringEngine,
-    SeverityLevel,
-)
+from src.scoring_engine import SeverityLevel
 from src.msf_validator import ValidationResult
 
 

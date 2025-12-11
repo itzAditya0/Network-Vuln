@@ -18,16 +18,15 @@ from typing import Any
 
 from src.cve_mapper import CVEMapper
 from src.endpoint_manager import Endpoint, EndpointManager
-from src.logger import AuditLogger, get_logger
+from src.logger import get_logger
 from src.metrics import get_metrics_collector
 from src.msf_validator import MetasploitValidator, ValidationResult
 from src.nmap_controller import NmapController, ScanType
-from src.rbac import RBACManager
 from src.report_generator import ReportGenerator
 from src.result_parser import ResultParser
 from src.safe_mode import SafeModeController
 from src.scoring_engine import ScoredVulnerability, ScoringEngine
-from src.worker_queue import ScanQueue, Task
+from src.worker_queue import ScanQueue
 
 logger = get_logger(__name__)
 

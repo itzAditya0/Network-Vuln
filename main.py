@@ -12,7 +12,6 @@ Commands:
 import argparse
 import asyncio
 import sys
-from pathlib import Path
 
 from src.cve_mapper import CVEMapper
 from src.endpoint_manager import EndpointManager
@@ -23,8 +22,6 @@ from src.pipeline import PipelineConfig, ScanPipeline
 from src.rbac import RBACManager, Role, User
 from src.report_generator import ReportGenerator
 from src.safe_mode import SafeModeController
-from src.scoring_engine import ScoringEngine
-from src.secrets import get_secrets_manager
 
 logger = get_logger(__name__)
 
@@ -284,14 +281,14 @@ async def run_scan(args: argparse.Namespace) -> int:
         print(f"Vulnerabilities:    {result.vulnerabilities_found}")
         print(f"Exploitable:        {result.exploitable_vulns}")
         print(f"Duration:           {(result.end_time - result.start_time).total_seconds():.1f}s")
-        print(f"\nReports:")
+        print("\nReports:")
         for fmt, path in result.reports.items():
             print(f"  {fmt}: {path}")
         
         # Show top vulnerabilities
         top = pipeline.get_top_vulnerabilities(result, n=5)
         if top:
-            print(f"\nTop Vulnerabilities:")
+            print("\nTop Vulnerabilities:")
             for i, v in enumerate(top, 1):
                 print(f"  {i}. [{v.severity.value.upper()}] {v.target}:{v.port} "
                       f"{v.cve or v.service} (score: {v.final_score:.2f})")
@@ -328,7 +325,7 @@ async def run_status(args: argparse.Namespace) -> int:
         "dead_letter": 0,
     }
     
-    print(f"\nScanner Status:")
+    print("\nScanner Status:")
     print(f"  Active Scans:   {stats['active_scans']}")
     print(f"  Pending Tasks:  {stats['pending_tasks']}")
     print(f"  Dead Letter:    {stats['dead_letter']}")

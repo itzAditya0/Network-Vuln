@@ -11,7 +11,6 @@ import pytest
 from datetime import datetime, timezone
 
 from src.safe_mode import (
-    SafeModeController,
     SecurityViolation,
     ApprovalStatus,
 )

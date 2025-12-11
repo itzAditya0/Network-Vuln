@@ -9,7 +9,6 @@ Integration with Nmap for vulnerability scanning:
 """
 
 import asyncio
-import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum

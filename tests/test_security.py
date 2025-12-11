@@ -11,7 +11,6 @@ Run: pytest tests/test_security.py -v
 """
 
 import io
-import json
 import re
 import sys
 from pathlib import Path

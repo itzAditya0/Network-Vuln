@@ -11,20 +11,19 @@ Run: pytest tests/perf/test_performance.py -v
 
 import asyncio
 import csv
-import os
 import resource
 import time
 import tracemalloc
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
 from src.endpoint_manager import Endpoint, EndpointManager
 from src.logger import AuditLogger
-from src.nmap_controller import NmapController, ScanResult, ScanType
+from src.nmap_controller import NmapController, ScanResult
 from src.pipeline import PipelineConfig, ScanPipeline
 from src.cve_mapper import CVEMapper
 from src.scoring_engine import ScoringEngine

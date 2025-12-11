@@ -10,9 +10,7 @@ Interactive demonstration of the HMAC audit chain:
 Run: python ops/demo_audit_chain.py
 """
 
-import json
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -20,7 +18,7 @@ from typing import Any
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from src.logger import AuditLogger
+from src.logger import AuditLogger  # noqa: E402
 
 
 # ANSI colors for terminal output
