@@ -125,7 +125,9 @@ class SecretsManager:
         key = self.get_secret("scanner/audit-hmac-key", key="value")
         if isinstance(key, str):
             return key.encode()
-        return bytes(key) if not isinstance(key, bytes) else key
+        if isinstance(key, bytes):
+            return key
+        raise SecretsError("HMAC key must be str or bytes")
 
 
 @lru_cache(maxsize=1)

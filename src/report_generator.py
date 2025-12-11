@@ -42,13 +42,12 @@ class ReportGenerator:
         self._output_dir.mkdir(parents=True, exist_ok=True)
         
         # Setup Jinja2
+        self._jinja_env: Environment | None = None
         if self._template_dir.exists():
             self._jinja_env = Environment(
                 loader=FileSystemLoader(str(self._template_dir)),
                 autoescape=select_autoescape(["html", "xml"]),
             )
-        else:
-            self._jinja_env: Environment | None = None
     
     def generate_json(
         self,
