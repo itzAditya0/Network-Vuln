@@ -369,14 +369,14 @@ mypy src/
 
 ---
 
+## Walkthrough
+
+See the full project walkthrough here: [WALKTHROUGH.md](./WALKTHROUGH.md)
+
+---
+
 ## 📄 License
 
 MIT License - See [LICENSE](LICENSE) for details.
 
 ---
-
-<div align="center">
-
-**Built with ❤️ for security professionals**
-
-</div>
