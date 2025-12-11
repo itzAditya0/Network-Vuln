@@ -49,7 +49,7 @@ def scrub_sensitive(data: dict[str, Any], scrub_pii: bool = True) -> dict[str, A
     if not scrub_pii:
         return data
     
-    result = {}
+    result: dict[str, Any] = {}
     for k, v in data.items():
         key_lower = k.lower()
         if any(pattern in key_lower for pattern in PII_PATTERNS):
@@ -101,7 +101,7 @@ def configure_logging(
         processors.append(structlog.dev.ConsoleRenderer())
     
     structlog.configure(
-        processors=processors,
+        processors=processors,  # type: ignore[arg-type]
         wrapper_class=structlog.make_filtering_bound_logger(
             getattr(logging, level.upper())
         ),

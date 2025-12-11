@@ -37,7 +37,7 @@ class PipelineConfig:
     max_concurrent_scans: int = 5
     validate_exploits: bool = True
     generate_reports: bool = True
-    report_formats: list[str] = None
+    report_formats: list[str] | None = None
     
     def __post_init__(self):
         if self.report_formats is None:
@@ -303,6 +303,8 @@ class ScanPipeline:
             
             # Validate
             try:
+                if self._msf is None:
+                    raise RuntimeError("Metasploit validator not configured")
                 result = self._msf.validate(
                     target=vuln["target"],
                     module=module_info["fullname"],

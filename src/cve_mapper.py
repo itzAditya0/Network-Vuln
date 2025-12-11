@@ -297,8 +297,8 @@ class CVEMapper:
             if not service:
                 continue
             
-            modules = self.search_by_service(service, version, product)
-            if modules:
+            matched_modules = self.search_by_service(service, version, product)
+            if matched_modules:
                 results.append({
                     "port": port.get("port"),
                     "service": service,
@@ -312,7 +312,7 @@ class CVEMapper:
                             "check_supported": m.check_supported,
                             "matched_service": service,
                         }
-                        for m in modules
+                        for m in matched_modules
                     ],
                 })
         

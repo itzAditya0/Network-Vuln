@@ -74,7 +74,7 @@ class ExploitApproval:
     approver_fingerprint: str | None = None
     ticket_id: str | None = None
     status: ApprovalStatus = ApprovalStatus.PENDING
-    created_at: datetime = None
+    created_at: datetime | None = None
     approved_at: datetime | None = None
     
     def __post_init__(self):
@@ -399,6 +399,7 @@ class SafeModeController:
             )
         
         # Final verification
+        assert approval.ticket_id is not None  # Validated at request time
         self.pre_validation_checklist(
             target=approval.target,
             user_id=approval.operator_id,

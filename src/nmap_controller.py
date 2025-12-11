@@ -374,11 +374,11 @@ class NmapController:
         results = await asyncio.gather(*tasks, return_exceptions=True)
         
         # Filter out errors
-        valid_results = []
+        valid_results: list[ScanResult] = []
         for target, result in zip(targets, results):
             if isinstance(result, Exception):
                 logger.error("async_scan_error", target=target, error=str(result))
-            else:
+            elif isinstance(result, ScanResult):
                 valid_results.append(result)
         
         return valid_results

@@ -284,6 +284,8 @@ class ScanQueue:
         )
         
         try:
+            if self._handler is None:
+                raise RuntimeError("Task handler not set")
             result = await self._handler(task)
             task.result = result
             task.status = TaskStatus.COMPLETED

@@ -107,6 +107,7 @@ class SecretsManager:
     def get_database_url(self) -> str:
         """Get PostgreSQL connection URL from Vault."""
         creds = self.get_secret("scanner/postgres")
+        assert isinstance(creds, dict)  # Type narrowing for mypy
         return (
             f"postgresql://{creds['username']}:{creds['password']}"
             f"@{creds['host']}:{creds['port']}/{creds['database']}"
@@ -115,12 +116,16 @@ class SecretsManager:
     
     def get_msf_credentials(self) -> dict[str, str]:
         """Get Metasploit RPC credentials from Vault."""
-        return self.get_secret("scanner/msf-rpc")
+        result = self.get_secret("scanner/msf-rpc")
+        assert isinstance(result, dict)  # Type narrowing for mypy
+        return result  # type: ignore[return-value]
     
     def get_hmac_key(self) -> bytes:
         """Get HMAC key for audit chain from Vault."""
         key = self.get_secret("scanner/audit-hmac-key", key="value")
-        return key.encode() if isinstance(key, str) else key
+        if isinstance(key, str):
+            return key.encode()
+        return bytes(key) if not isinstance(key, bytes) else key
 
 
 @lru_cache(maxsize=1)

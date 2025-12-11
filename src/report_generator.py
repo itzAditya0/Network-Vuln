@@ -48,7 +48,7 @@ class ReportGenerator:
                 autoescape=select_autoescape(["html", "xml"]),
             )
         else:
-            self._jinja_env = None
+            self._jinja_env: Environment | None = None
     
     def generate_json(
         self,
