@@ -1,0 +1,24 @@
+# Development environment overrides
+# DO NOT use in production
+
+scanner:
+  nmap:
+    timing_template: "T3"  # Faster for dev
+  rate_limit:
+    max_per_minute_per_cidr: 30
+
+database:
+  # Local dev Postgres
+  host: "localhost"
+  port: 5432
+  database: "vulnscanner_dev"
+  ssl_mode: "prefer"  # Relaxed for local
+
+vault:
+  address: "http://127.0.0.1:8200"  # Local Vault dev server
+
+logging:
+  level: "DEBUG"
+
+metrics:
+  prometheus_port: 9091

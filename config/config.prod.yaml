@@ -1,0 +1,26 @@
+# Production environment overrides
+# ALL secrets from Vault - never in this file
+
+scanner:
+  nmap:
+    timing_template: "T2"  # Polite
+  rate_limit:
+    max_per_minute_per_cidr: 5  # Conservative
+
+metasploit:
+  safe_mode: true  # NEVER change this
+
+database:
+  ssl_mode: "verify-full"
+  pool_size: 20
+
+vault:
+  auth_method: "approle"
+
+audit:
+  external_anchor: true  # WORM storage enabled
+
+logging:
+  level: "INFO"
+  scrub_pii: true
+  scrub_payloads: true

@@ -1,0 +1,137 @@
+# Network Vulnerability Scanner - Docker Compose
+# Includes: scanner, msfrpcd (with mTLS proxy), postgres, prometheus, grafana
+
+version: "3.8"
+
+services:
+  # === Scanner Application ===
+  scanner:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    container_name: vulnscanner
+    environment:
+      - VAULT_ADDR=${VAULT_ADDR:-http://vault:8200}
+      - VAULT_ROLE_ID=${VAULT_ROLE_ID}
+      - VAULT_SECRET_ID=${VAULT_SECRET_ID}
+      - DATABASE_URL=postgresql://vulnscanner:${DB_PASSWORD}@postgres:5432/vulnscanner?sslmode=require
+      - LOG_LEVEL=INFO
+    volumes:
+      - ../reports:/app/reports
+      - ../config:/app/config:ro
+    networks:
+      - internal
+      - external
+    depends_on:
+      postgres:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+    restart: unless-stopped
+
+  # === Metasploit RPC (localhost only, fronted by mTLS proxy) ===
+  msfrpcd:
+    image: metasploitframework/metasploit-framework:latest
+    container_name: msfrpcd
+    command: >
+      msfrpcd -S -a 127.0.0.1 -p 55553
+      --ssl --ssl-cert /certs/msf.crt --ssl-key /certs/msf.key
+    volumes:
+      - ./certs:/certs:ro
+    networks:
+      - internal  # No external access
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+    restart: unless-stopped
+
+  # === mTLS Reverse Proxy for msfrpcd ===
+  envoy:
+    image: envoyproxy/envoy:v1.28-latest
+    container_name: envoy-proxy
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml:ro
+      - ./certs:/certs:ro
+    ports:
+      - "8443:8443"  # mTLS endpoint
+    networks:
+      - internal
+      - external
+    depends_on:
+      - msfrpcd
+    restart: unless-stopped
+
+  # === PostgreSQL Database ===
+  postgres:
+    image: postgres:15-alpine
+    container_name: vulnscanner-db
+    environment:
+      - POSTGRES_DB=vulnscanner
+      - POSTGRES_USER=vulnscanner
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vulnscanner"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+    restart: unless-stopped
+
+  # === Prometheus Metrics ===
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+    ports:
+      - "9091:9090"
+    networks:
+      - internal
+      - external
+    restart: unless-stopped
+
+  # === Grafana Dashboard ===
+  grafana:
+    image: grafana/grafana:10.2.2
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - external
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+networks:
+  internal:
+    internal: true  # No external access
+  external:
+
+volumes:
+  postgres_data:
+  prometheus_data:
+  grafana_data:

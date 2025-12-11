@@ -1,0 +1,62 @@
+# Network Vulnerability Scanner Configuration
+# Environment: base (override with config.dev.yaml or config.prod.yaml)
+
+scanner:
+  # Nmap settings
+  nmap:
+    default_scripts: ["vuln", "version"]
+    timing_template: "T2"  # Polite scanning by default
+    timeout_seconds: 300
+    retries: 3
+    fallback_scripts: ["banner", "http-headers"]
+
+  # Rate limiting
+  rate_limit:
+    max_per_minute_per_cidr: 10  # Per /24
+    cooldown_multiplier: 2.0
+    max_concurrent_scans: 5
+
+# Metasploit RPC (via mTLS proxy)
+metasploit:
+  proxy_url: "https://localhost:8443"  # Envoy mTLS proxy
+  timeout_seconds: 60
+  safe_mode: true  # ALWAYS true unless --allow-exploit with two-person approval
+  # Credentials from Vault - never hardcoded
+  # vault_path: "scanner/msf-rpc"
+
+# Database (PostgreSQL with TLS)
+database:
+  # Connection string from Vault
+  # vault_path: "scanner/postgres"
+  pool_size: 10
+  ssl_mode: "verify-full"
+
+# Vault
+vault:
+  address_env: "VAULT_ADDR"
+  auth_method: "approle"  # Or "oidc" for CI
+  # role_id_env: "VAULT_ROLE_ID"
+  # secret_id_env: "VAULT_SECRET_ID"
+
+# Audit
+audit:
+  hmac_key_vault_path: "scanner/audit-hmac-key"
+  retention_days: 365
+  external_anchor: false  # Enable for WORM/timestamping
+
+# Logging
+logging:
+  level: "INFO"
+  format: "json"  # Structured JSON logs
+  scrub_pii: true
+  scrub_payloads: true
+
+# Metrics
+metrics:
+  prometheus_port: 9090
+  cardinality_limit: 1000  # Avoid high-cardinality labels
+
+# RBAC
+rbac:
+  admin_mfa_required: true
+  approval_notification_webhook: ""  # Slack/email webhook
