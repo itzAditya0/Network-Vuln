@@ -40,7 +40,7 @@ def safe_mode_controller(rbac_manager, mock_audit_logger):
         ScopeAuthorization(
             id="test-scope",
             cidr=IPv4Network("10.0.0.0/24"),
-            ticket_id="VULN-TEST",
+            ticket_id="VULN-001",
             approved_by=["admin1"],
             valid_from=datetime.now(timezone.utc) - timedelta(hours=1),
             valid_until=datetime.now(timezone.utc) + timedelta(hours=24),
@@ -48,7 +48,7 @@ def safe_mode_controller(rbac_manager, mock_audit_logger):
         ScopeAuthorization(
             id="lab-scope",
             cidr=IPv4Network("192.168.99.0/24"),
-            ticket_id="VULN-LAB",
+            ticket_id="VULN-002",
             approved_by=["admin1"],
             valid_from=datetime.now(timezone.utc) - timedelta(hours=1),
             valid_until=datetime.now(timezone.utc) + timedelta(hours=24),

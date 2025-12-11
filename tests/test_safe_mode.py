@@ -35,7 +35,7 @@ class TestSafeMode:
         result = safe_mode_controller.pre_scan_check(
             target="10.0.0.1",
             user_id="operator1",
-            ticket_id="VULN-TEST"
+            ticket_id="VULN-001"
         )
         assert result is True
     
@@ -45,7 +45,7 @@ class TestSafeMode:
             safe_mode_controller.pre_scan_check(
                 target="192.168.1.1",  # Not authorized
                 user_id="operator1",
-                ticket_id="VULN-TEST"
+                ticket_id="VULN-001"
             )
         assert "not in authorized scope" in str(exc.value)
     
@@ -65,7 +65,7 @@ class TestSafeMode:
             safe_mode_controller.pre_scan_check(
                 target="10.0.0.1",
                 user_id="viewer1",  # Viewer cannot scan
-                ticket_id="VULN-TEST"
+                ticket_id="VULN-001"
             )
         assert "lacks scan permission" in str(exc.value)
 
@@ -80,7 +80,7 @@ class TestTwoPersonApproval:
             module="exploit/test",
             operator_id="operator1",
             operator_fingerprint="device-1",
-            ticket_id="VULN-LAB"
+            ticket_id="VULN-002"
         )
         assert approval_id is not None
     
@@ -96,7 +96,7 @@ class TestTwoPersonApproval:
             module="exploit/test",
             operator_id="operator1",
             operator_fingerprint="device-1",
-            ticket_id="VULN-LAB"
+            ticket_id="VULN-002"
         )
         
         # Approve with different user
@@ -116,7 +116,7 @@ class TestTwoPersonApproval:
             module="exploit/test",
             operator_id="operator1",
             operator_fingerprint="device-1",
-            ticket_id="VULN-LAB"
+            ticket_id="VULN-002"
         )
         
         with pytest.raises(SecurityViolation) as exc:
@@ -137,7 +137,7 @@ class TestTwoPersonApproval:
             module="exploit/test",
             operator_id="operator1",
             operator_fingerprint="device-1",
-            ticket_id="VULN-LAB"
+            ticket_id="VULN-002"
         )
         
         with pytest.raises(SecurityViolation) as exc:
