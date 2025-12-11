@@ -165,7 +165,7 @@ class NmapController:
             NmapError: If scan fails after retries
         """
         config = SCAN_CONFIGS[scan_type]
-        arguments: str = custom_args or config["arguments"]
+        arguments: str = custom_args or str(config["arguments"])
         
         # Add timing template
         if "-T" not in arguments:
