@@ -318,7 +318,8 @@ async def run_report(args: argparse.Namespace) -> int:
 
 async def run_status(args: argparse.Namespace) -> int:
     """Execute status command."""
-    metrics = get_metrics_collector()
+    # Get metrics (placeholder for future use)
+    _ = get_metrics_collector()
     stats = {
         "active_scans": 0,  # Would query from queue
         "pending_tasks": 0,

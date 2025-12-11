@@ -11,7 +11,6 @@ Orchestrates the complete vulnerability scanning workflow:
 7. Generate reports
 """
 
-import asyncio
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any

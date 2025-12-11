@@ -168,7 +168,7 @@ class NmapController:
         arguments = custom_args or config["arguments"]
         
         # Add timing template
-        if f"-T" not in arguments:
+        if "-T" not in arguments:
             arguments = f"-{self._timing} {arguments}"
         
         # Add port specification

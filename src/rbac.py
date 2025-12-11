@@ -11,7 +11,6 @@ Implements:
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum, auto
-from typing import Any
 
 from src.logger import get_logger
 

@@ -119,7 +119,7 @@ def demo_tamper_detection(records: list[dict[str, Any]], hmac_key: bytes) -> Non
     
     print(f"Simulating attacker modifying record #{tamper_index + 1}:")
     print(f"  Original action: '{original_action}'")
-    print(f"  Tampered action: 'exploit_executed'")
+    print("  Tampered action: 'exploit_executed'")
     print()
     
     print("Attempting to verify tampered chain...\n")
